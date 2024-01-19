@@ -1,0 +1,11 @@
+/build
+/coverage
+/node_modules
+
+.DS_Store
+junit.xml
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+/.vs/
