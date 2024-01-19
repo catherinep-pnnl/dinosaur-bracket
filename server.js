@@ -26,13 +26,14 @@ app.use(express.json());
 
 // Endpoints
 app.get("/api/dinosaurs", async (req, res) => {
-  const dinosaurs = await Dinosaur.findAll();
-  res.json(dinosaurs);
+  const allDinosaurs = await Dinosaur.findAll();
+  res.json(allDinosaurs);
 });
 
 app.post("/api/dinosaurs", async (req, res) => {
-  const dinosaur = await Dinosaur.create(req.body);
-  res.json(dinosaur);
+  // TODO: handle an array
+  const newDinosaur = await Dinosaur.create(req.body);
+  res.json(newDinosaur);
 });
 
 app.post("/api/dinosaurs/:bracket/:name", async (req, res) => {
@@ -43,7 +44,7 @@ app.post("/api/dinosaurs/:bracket/:name", async (req, res) => {
     dinosaur.increment("votes", { by: 1 });
     res.json(dinosaur);
   } else {
-    console.log("error", dinosaur);
+    return res.status(404).json({ message: "Dinosaur not found" });
   }
 });
 
