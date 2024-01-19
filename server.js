@@ -11,27 +11,28 @@ const sequelize = new Sequelize("dinosaurs", "root", process.env.DB_PASSWORD, {
 });
 
 // Define a model
-const User = sequelize.define("User", {
-  name: Sequelize.STRING,
-  email: Sequelize.STRING,
+const Dinosaur = sequelize.define("Dinosaur", {
+  name: { type: Sequelize.STRING, allowNull: false },
+  votes: { type: Sequelize.INTEGER, allowNull: false },
+  bracket: { type: Sequelize.STRING, allowNull: false },
 });
 
 // Sync the model with the database
-sequelize.sync();
+sequelize.sync({ force: true }); // TODO: remove true when ready to go to prod
 
 // Middleware
 app.use(express.json());
 
 // Endpoints
 app.get("/dinosaurs", async (req, res) => {
-  const users = await User.findAll();
-  res.json(users);
+  const dinosaurs = await Dinosaur.findAll();
+  res.json(dinosaurs);
 });
 
 app.post("/dinosaurs", async (req, res) => {
-  const { name, email } = req.body;
-  const user = await User.create({ name, email });
-  res.json(user);
+  const { name, votes } = req.body;
+  const dinosaur = await Dinosaur.update({ name, votes }); // have to find by name and bracket, and update the votes
+  res.json(dinosaur);
 });
 
 // Protection middleware
@@ -45,5 +46,5 @@ app.use((req, res, next) => {
 
 // Start the server
 app.listen(3000, () => {
-  console.log("Server started on port 3000");
+  console.log("Server started on port 3001");
 });
